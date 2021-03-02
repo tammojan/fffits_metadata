@@ -33,9 +33,15 @@ SITELAT =                52.84
 
 ### Usage
 ```
+usage: add_fits_metadata.py [-h] dir_path
 
-```usage: add_fits_metadata.py [-h] dir_path
-add_fits_metadata.py: error: the following arguments are required: dir_path
+Add metadata to FF fits files
+
+positional arguments:
+  dir_path    Path to the folder with FF files
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ### Acknowledgement
