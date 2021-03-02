@@ -33,7 +33,7 @@ SITELAT =                52.84
 
 ### Usage
 ```
-usage: add_fits_metadata.py [-h] dir_path
+usage: add_fffits_metadata.py [-h] dir_path
 
 Add metadata to FF fits files
 
