@@ -37,3 +37,7 @@ SITELAT =                52.84
 ```usage: add_fits_metadata.py [-h] dir_path
 add_fits_metadata.py: error: the following arguments are required: dir_path
 ```
+
+### Acknowledgement
+
+The code in `fit_wcs.py` was kindly provided by Cees Bassa.
