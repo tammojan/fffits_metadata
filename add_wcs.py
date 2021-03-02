@@ -12,6 +12,7 @@ from RMS.Astrometry.ApplyAstrometry import xyToRaDecPP
 
 from astropy import wcs
 from astropy.io import fits
+from astropy.io.fits.header import Header
 from astropy.time import Time
 
 import logging
@@ -121,25 +122,30 @@ def add_wcs(ff_filename, star_list_xy, config):
     hdu_list = fits.open(ff_filename)
     obstime = Time(filenameToDatetime(ff_filename))
 
-    for hdu_num, hdu in enumerate(hdu_list):
-        if hdu_num > 0:  # First header is not an image so should not get WCS
-            new_header = w.to_fits(relax=True)[0].header
-        else:
-            new_header = {}
+    header_meta = {}
+    header_meta["OBSERVER"] = config.stationID.strip()
+    header_meta["INSTRUME"] = "Global Meteor Network"
+    header_meta["MJD-OBS"] = obstime.mjd
+    header_meta["DATE-OBS"] = obstime.fits
+    header_meta["NFRAMES"] = 256
+    header_meta["EXPTIME"] = 256 / config.fps
+    header_meta["SITELONG"] = round(config.longitude, 2)
+    header_meta["SITELAT"] = round(config.latitude, 2)
 
-        new_header["OBSERVER"] = config.stationID.strip()
-        new_header["INSTRUME"] = "Global Meteor Network"
-        new_header["MJD-OBS"] = obstime.mjd
-        new_header["DATE-OBS"] = obstime.fits
-        new_header["NFRAMES"] = 256
-        new_header["EXPTIME"] = 256 / config.fps
-        new_header["SITELONG"] = round(config.longitude, 2)
-        new_header["SITELAT"] = round(config.latitude, 2)
+    for hdu in hdu_list:
+        if hdu.header["NAXIS"] == 0:  # First header is not an image so should not get WCS
+            new_header = Header()
+        else:
+            new_header = w.to_fits(relax=True)[0].header
+
+        for key, value in header_meta.items():
+            new_header.append((key, value))
 
         for key, value in new_header.items():
             if key in hdu.header:
                 continue
             hdu.header[key] = value
+
     hdu_list.writeto(ff_filename, overwrite=True)
 
 
@@ -154,4 +160,4 @@ if __name__ == "__main__":
     for ff_filename in glob("FF*fits"):
         logger.info(f"Updating {ff_filename}")
         add_wcs(ff_filename, fit_xy, config)
-        break
+        break # TODO remove
