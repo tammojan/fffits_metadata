@@ -112,18 +112,7 @@ def add_fffits_metadata(ff_filename, config, platepars_recalibrated,
 
     hdu_list.writeto(ff_filename, overwrite=True)
 
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-
-    parser = ArgumentParser(description="Add metadata to FF fits files")
-    parser.add_argument('dir_path',
-                        type=str,
-                        help="Path to the folder with FF files")
-
-    args = parser.parse_args()
-
-    dir_path = os.path.abspath(args.dir_path)
+def main(dir_path):
     rms_path = os.path.abspath(os.path.dirname(os.path.dirname(RMS.__file__)))
 
     try:
@@ -152,3 +141,17 @@ if __name__ == "__main__":
         logger.info(f"Updating {ff_filename}")
         add_fffits_metadata(ff_filename, config, platepars_recalibrated,
                             global_platepar)
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+
+    parser = ArgumentParser(description="Add metadata to FF fits files")
+    parser.add_argument('dir_path',
+                        type=str,
+                        help="Path to the folder with FF files")
+
+    args = parser.parse_args()
+
+    dir_path = os.path.abspath(args.dir_path)
+
+    main(dir_path)
