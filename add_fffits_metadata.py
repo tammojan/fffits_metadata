@@ -82,7 +82,7 @@ def add_fffits_metadata(ff_filename, config, platepars_recalibrated,
                 5,
                 projection="ZEA")
 
-    hdu_list = fits.open(ff_filename)
+    hdu_list = fits.open(ff_filename, scale_back=True)
     obstime = Time(filenameToDatetime(ff_basename))
 
     header_meta = {}
